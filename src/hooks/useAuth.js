@@ -1,9 +1,8 @@
-import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux'
 
-const useAuth = () => {
-    const { user, accessToken } = useSelector((state) => state.auth) || {};
+export function useAuth() {
+    // using useSelector hook from react-redux to get authenticated user
+    const { accessToken, user } = useSelector((state) => state.auth)
 
-    return user && accessToken ? true : false;
-};
-
-export default useAuth;
+    return accessToken && user ? true : false
+}

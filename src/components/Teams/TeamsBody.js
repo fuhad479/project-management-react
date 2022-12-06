@@ -1,6 +1,6 @@
-import React from 'react';
-import TeamItems from './TeamItems';
-import TeamsHead from './TeamsHead';
+import React from 'react'
+import TeamItems from './TeamItems'
+import TeamsHead from './TeamsHead'
 
 const TeamsBody = () => {
     return (
@@ -8,7 +8,7 @@ const TeamsBody = () => {
             <TeamsHead />
             <TeamItems />
         </>
-    );
-};
+    )
+}
 
-export default TeamsBody;
+export default TeamsBody
