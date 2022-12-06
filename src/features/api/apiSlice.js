@@ -1,8 +1,8 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { userLoggedOut } from '../auth/authSlice';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { userLoggedOut } from "../auth/authSlice";
 
-const baseQuery = fetchBaseQuery({
-    baseUrl: process.env.REACT_APP_BASE_URL,
+/* const baseQuery = fetchBaseQuery({
+    baseUrl: 'http://localhost:5000',
     prepareHeaders: async (headers, { getState }) => {
         const token = getState()?.auth?.accessToken;
 
@@ -27,4 +27,12 @@ export const apiSlice = createApi({
         return result;
     },
     endpoints: (builder) => ({}),
+}); */
+
+export const apiSlice = createApi({
+  reducerPath: "api",
+  baseQuery: fetchBaseQuery({
+    baseUrl: "http://localhost:5000",
+  }),
+  endpoints: () => ({}),
 });
