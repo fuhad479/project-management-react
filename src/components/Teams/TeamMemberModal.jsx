@@ -1,70 +1,69 @@
-import React, { useEffect, useState } from 'react';
-import { useAddTeamMemberMutation } from '../../features/teams/teamsApi';
-import { useGetUserQuery } from '../../features/users/usersApi';
-import toast from 'react-hot-toast';
-import isValidEmail from '../../utils/isValidEmail';
-import Error from '../common/Error';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import React, { useEffect, useState } from 'react'
+import { useAddTeamMemberMutation } from '../../features/teams/teamsApi'
+import { useGetUserQuery } from '../../features/users/usersApi'
+import toast from 'react-hot-toast'
+import isValidEmail from '../../utils/isValidEmail'
+import Error from '../common/Error'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
 
-const TeamCardModal = ({ id, members, setIsOpen, setIsOptionsOpen }) => {
+const TeamMemberModal = ({ id, members, setOpen, setIsOptionsOpen, setAddMemberOpen }) => {
     // local state
-    const [email, setEmail] = useState('');
-    const [skipReq, setSkipReq] = useState(true);
-    const [disabled, setDisabled] = useState(true);
+    const [email, setEmail] = useState('')
+    const [skipReq, setSkipReq] = useState(true)
+    const [disabled, setDisabled] = useState(true)
 
-    const { data: user } = useGetUserQuery(email, { skip: skipReq });
-    const [addTeamMember, { isLoading, isSuccess }] =
-        useAddTeamMemberMutation();
+    const { data: user } = useGetUserQuery(email, { skip: skipReq })
+    const [addTeamMember, { isLoading, isSuccess }] = useAddTeamMemberMutation()
 
-        const existingMember = members.filter((member) => member.email === email);
-        
-        useEffect(() => {
+    // const existingMember = members.filter((member) => member.email === email)
+
+    /* useEffect(() => {
         if (user?.length > 0 && existingMember?.length === 0) {
-            setDisabled(false);
+            setDisabled(false)
         } else {
-            setDisabled(true);
+            setDisabled(true)
         }
-    }, [user, existingMember]);
+    }, [user, existingMember]) */
 
     const debounceHandler = (fn, delay) => {
-        let timeoutId;
+        let timeoutId
         return (...arg) => {
-            clearTimeout(timeoutId);
+            clearTimeout(timeoutId)
 
             timeoutId = setTimeout(() => {
-                fn(...arg);
-            }, delay);
-        };
-    };
+                fn(...arg)
+            }, delay)
+        }
+    }
 
     const doSearch = (value) => {
         if (isValidEmail(value)) {
-            setEmail(value);
-            setSkipReq(false);
+            setEmail(value)
+            setSkipReq(false)
         }
-    };
+    }
 
-    const handleSearch = debounceHandler(doSearch, 500);
+    const handleSearch = debounceHandler(doSearch, 500)
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+        e.preventDefault()
 
-        addTeamMember({ id, data: { members: [...members, ...user] } });
-    };
+        addTeamMember({ id, data: { members: [...members, ...user] } })
+    }
 
     const handleModalClose = () => {
-        setIsOpen(false);
-        setIsOptionsOpen(false);
-    };
+        setOpen(false)
+        setIsOptionsOpen(false)
+    }
 
     useEffect(() => {
         if (isSuccess) {
-            setIsOpen(false);
-            setIsOptionsOpen(false);
-            toast.success('Member added successfully!');
+            setOpen(false)
+            setIsOptionsOpen(false)
+            toast.success('Member added successfully!')
         }
-    }, [isSuccess, setIsOpen, setIsOptionsOpen]);
+    }, [isSuccess, setOpen, setIsOptionsOpen])
 
     return (
         <div className="fixed top-0 left-0 w-full flex items-center justify-center bg-violet-500 h-full bg-opacity-60 z-10">
@@ -93,10 +92,16 @@ const TeamCardModal = ({ id, members, setIsOpen, setIsOptionsOpen }) => {
                         </svg>
                     </button>
                 </div>
-                <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+                <form
+                    className="mt-8 space-y-6"
+                    onSubmit={handleSubmit}
+                >
                     <div className="rounded-md shadow-sm -space-y-px">
                         <div className="flex gap-3">
-                            <label htmlFor="email" className="sr-only">
+                            <label
+                                htmlFor="email"
+                                className="sr-only"
+                            >
                                 Team title
                             </label>
                             <input
@@ -112,7 +117,7 @@ const TeamCardModal = ({ id, members, setIsOpen, setIsOptionsOpen }) => {
                             <button
                                 type="submit"
                                 className="group flex items-center justify-center gap-3 py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-violet-600 hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500 disabled:bg-gray-300 disabled:hover:bg-gray-300"
-                                disabled={disabled || isLoading}
+                                // disabled={disabled || isLoading}
                             >
                                 <span>Add</span>
                                 <FontAwesomeIcon icon={faArrowRight} />
@@ -120,9 +125,9 @@ const TeamCardModal = ({ id, members, setIsOpen, setIsOptionsOpen }) => {
                         </div>
                     </div>
 
-                    {existingMember?.length > 0 && (
+                    {/* {existingMember?.length > 0 && (
                         <Error message={'Member already exist in the team!'} />
-                    )}
+                    )} */}
 
                     {user?.length === 0 && (
                         <Error message={'No user founded!'} />
@@ -130,7 +135,7 @@ const TeamCardModal = ({ id, members, setIsOpen, setIsOptionsOpen }) => {
                 </form>
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default TeamCardModal;
+export default TeamMemberModal

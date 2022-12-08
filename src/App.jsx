@@ -22,25 +22,19 @@ export default function App() {
     }, [])
 
     return (
-        isAuthenticated && (
-            <Routes>
-                <Route
-                    path="/"
-                    element={
-                        isAuthenticated ? <Navigate to="/teams" /> : <Login />
-                    }
-                />
-                <Route
-                    path="/teams"
-                    element={!isAuthenticated ? <Navigate to="/" /> : <Teams />}
-                />
-                <Route
-                    path="/projects"
-                    element={
-                        !isAuthenticated ? <Navigate to="/" /> : <Projects />
-                    }
-                />
-            </Routes>
-        )
+        <Routes>
+            <Route
+                path="/"
+                element={isAuthenticated ? <Navigate to="/teams" /> : <Login />}
+            />
+            <Route
+                path="/teams"
+                element={!isAuthenticated ? <Navigate to="/" /> : <Teams />}
+            />
+            <Route
+                path="/projects"
+                element={!isAuthenticated ? <Navigate to="/" /> : <Projects />}
+            />
+        </Routes>
     )
 }

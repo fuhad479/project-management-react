@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+    .active {
+        border-color: rgba(43, 82, 118, 0.5);
+    }
+}

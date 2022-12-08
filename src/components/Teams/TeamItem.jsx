@@ -1,0 +1,85 @@
+import { useState } from 'react'
+import { useSelector } from 'react-redux'
+import {
+    DotsVerticalIcon,
+    TrashIcon,
+    Pencil1Icon,
+    Cross1Icon
+} from '@radix-ui/react-icons'
+import { ReactComponent as PersonAdd } from '../../assets/person-add.svg'
+import { useDeleteTeamMutation } from '../../features/teams/teamsApi'
+import { url } from 'gravatar'
+import moment from 'moment'
+
+const TeamItem = ({ team, setAddMemberOpen }) => {
+    const [open, setOpen] = useState(false)
+
+    // using deleteTeam hook from RTK Query
+    const [deleteTeam] = useDeleteTeamMutation()
+
+    // using useSelector hook from RTK Query to get authenticated user data
+    const { user } = useSelector((state) => state.auth) || {}
+    const { email } = user || {}
+    const { id, title, description, date, members } = team || {}
+
+    return (
+        <>
+            <div className="border border-astronaut-200 shadow-[0_0_20px_5px] shadow-astronaut-100 rounded-[6px] p-[16px] cursor-pointer">
+                <div className="flex items-center justify-between mb-[8px] relative">
+                    <span
+                        className={`inline-block border border-astronaut-200 rounded-full py-[3px] px-[12px] text-[12px] font-medium uppercase `}
+                    >
+                        {title}
+                    </span>
+                    {open && (
+                        <div className="absolute right-[25px] flex items-center">
+                            <div
+                                onClick={() => deleteTeam({ id, email })}
+                                className="w-[25px] h-[25px] flex items-center justify-center border border-transparent rounded-full hover:border-astronaut-200"
+                            >
+                                <TrashIcon />
+                            </div>
+                            <div
+                                onClick={() => setAddMemberOpen(true)}
+                                className="w-[25px] h-[25px] flex items-center justify-center border border-transparent rounded-full hover:border-astronaut-200"
+                            >
+                                <PersonAdd />
+                            </div>
+                            <div className="w-[25px] h-[25px] flex items-center justify-center border border-transparent rounded-full hover:border-astronaut-200">
+                                <Pencil1Icon />
+                            </div>
+                        </div>
+                    )}
+                    <div
+                        onClick={() => setOpen(!open)}
+                        className={`w-[25px] h-[25px] flex items-center justify-center border border-transparent rounded-full hover:border-astronaut-200 ${
+                            open && 'border-astronaut-200'
+                        }`}
+                    >
+                        {open ? <Cross1Icon /> : <DotsVerticalIcon />}
+                    </div>
+                </div>
+                <p className="text-[14px]">{description}</p>
+                <div className="flex items-center justify-between mt-3 relative">
+                    <p className="w-auto grow text-[14px] font-bold">
+                        {moment(date).format('MMM DD')}
+                    </p>
+                    <div className="absolute w-auto h-full flex right-0 ml-auto -space-x-2">
+                        {members.map((member) => (
+                            <img
+                                key={member.email}
+                                src={url(member.email, {
+                                    size: 25
+                                })}
+                                alt="gravatar"
+                                className="rounded-full"
+                            />
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </>
+    )
+}
+
+export default TeamItem
