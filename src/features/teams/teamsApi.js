@@ -1,29 +1,29 @@
-import { apiSlice } from '../api/apiSlice';
+import { apiSlice } from '../api/apiSlice'
 
 export const teamsApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getAllTeams: builder.query({
-            query: ({ team }) => `/teams?team=${team}`,
+            query: ({ team }) => `/teams?team=${team}`
         }),
         getTeams: builder.query({
-            query: (email) => `/teams?q=${email}`,
+            query: (email) => `/teams?q=${email}`
         }),
         getTeam: builder.query({
-            query: ({ email, team }) => `/teams?q=${email}&team=${team}`,
+            query: (team) => `/teams/?title_like=${team}`
         }),
         getTeamInfo: builder.query({
-            query: (id) => `/teams/${id}`,
+            query: (id) => `/teams/${id}`
         }),
         addTeams: builder.mutation({
             query: (data) => ({
                 url: '/teams',
                 method: 'POST',
-                body: data,
+                body: data
             }),
             async onQueryStarted(arg, { queryFulfilled, dispatch }) {
                 try {
-                    const { data } = (await queryFulfilled) || {};
-                    const { id, email } = data || {};
+                    const { data } = (await queryFulfilled) || {}
+                    const { id, email } = data || {}
 
                     if (id) {
                         dispatch(
@@ -31,24 +31,24 @@ export const teamsApi = apiSlice.injectEndpoints({
                                 'getTeams',
                                 email,
                                 (draft) => {
-                                    draft.push(data);
+                                    draft.push(data)
                                 }
                             )
-                        );
+                        )
                     }
                 } catch (err) {}
-            },
+            }
         }),
         addTeamMember: builder.mutation({
             query: ({ id, data }) => ({
                 url: `/teams/${id}`,
                 method: 'PATCH',
-                body: data,
+                body: data
             }),
             async onQueryStarted({ id }, { queryFulfilled, dispatch }) {
                 try {
-                    const { data } = (await queryFulfilled) || {};
-                    const { email } = data || {};
+                    const { data } = (await queryFulfilled) || {}
+                    const { email } = data || {}
 
                     dispatch(
                         apiSlice.util.updateQueryData(
@@ -57,11 +57,11 @@ export const teamsApi = apiSlice.injectEndpoints({
                             (draft) => {
                                 const team = draft.find(
                                     (t) => Number(t.id) === Number(id)
-                                );
-                                team.members = data.members;
+                                )
+                                team.members = data.members
                             }
                         )
-                    );
+                    )
 
                     dispatch(
                         apiSlice.util.updateQueryData(
@@ -70,18 +70,18 @@ export const teamsApi = apiSlice.injectEndpoints({
                             (draft) => {
                                 const team = draft.find(
                                     (t) => Number(t.id) === Number(id)
-                                );
-                                team.members = data.members;
+                                )
+                                team.members = data.members
                             }
                         )
-                    );
+                    )
                 } catch (err) {}
-            },
+            }
         }),
         deleteTeam: builder.mutation({
             query: ({ id, email }) => ({
                 url: `/teams/${id}`,
-                method: 'DELETE',
+                method: 'DELETE'
             }),
             async onQueryStarted({ id, email }, { queryFulfilled, dispatch }) {
                 const result = dispatch(
@@ -91,22 +91,22 @@ export const teamsApi = apiSlice.injectEndpoints({
                         (draft) => {
                             const updatedTeams = draft.filter(
                                 (team) => Number(team.id) !== Number(id)
-                            );
+                            )
 
-                            return [...updatedTeams];
+                            return [...updatedTeams]
                         }
                     )
-                );
+                )
 
                 try {
-                    await queryFulfilled;
+                    await queryFulfilled
                 } catch (err) {
-                    result.undo();
+                    result.undo()
                 }
-            },
-        }),
-    }),
-});
+            }
+        })
+    })
+})
 
 export const {
     useGetAllTeamsQuery,
@@ -115,5 +115,5 @@ export const {
     useGetTeamInfoQuery,
     useAddTeamsMutation,
     useAddTeamMemberMutation,
-    useDeleteTeamMutation,
-} = teamsApi;
+    useDeleteTeamMutation
+} = teamsApi

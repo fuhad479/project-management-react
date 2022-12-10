@@ -37,7 +37,6 @@ const Login = () => {
                 className="w-[310px] flex flex-col border border-[hsl(210deg,18%,87%)] rounded-[6px] bg-[hsl(210,29%,97%)] p-[16px]"
                 onSubmit={handleSubmit}
             >
-                <div>
                     <FormField
                         label="Email address"
                         type="email"
@@ -47,8 +46,6 @@ const Login = () => {
                         onChangeHandler={(e) => setEmail(e.target.value)}
                         className="appearance-none block w-full text-[14px] border border-1-[hsl(210deg,18%,87%)] rounded-[6px] py-[5px] px-[12px] mt-[4px] mb-[16px] focus:outline-none focus:border-[#0969da]"
                     />
-                </div>
-                <div>
                     <FormField
                         label="Password"
                         type="password"
@@ -58,7 +55,6 @@ const Login = () => {
                         onChangeHandler={(e) => setPassword(e.target.value)}
                         className="appearance-none block w-full text-[14px] border border-1-[hsl(210deg,18%,87%)] rounded-[6px] py-[5px] px-[12px] mt-[4px] mb-[16px] focus:outline-none focus:border-[#0969da]"
                     />
-                </div>
                 <input
                     type="submit"
                     name="submit"

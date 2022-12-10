@@ -6,4 +6,9 @@
     .active {
         border-color: rgba(43, 82, 118, 0.5);
     }
+    .no-scrollbar::-webkit-scrollbar {
+        appearance: none;
+        display: none;
+        visibility: hidden;
+    }
 }

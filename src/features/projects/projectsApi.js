@@ -1,20 +1,20 @@
-import { apiSlice } from '../api/apiSlice';
+import { apiSlice } from '../api/apiSlice'
 
 export const projectsApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getProjects: builder.query({
-            query: () => `/projects`,
+            query: () => `/projects`
         }),
         addProject: builder.mutation({
             query: (data) => ({
                 url: '/projects',
                 method: 'POST',
-                body: data,
+                body: data
             }),
             async onQueryStarted(arg, { queryFulfilled, dispatch }) {
                 try {
-                    const { data } = (await queryFulfilled) || {};
-                    const { id } = data || {};
+                    const { data } = (await queryFulfilled) || {}
+                    const { id } = data || {}
 
                     if (id) {
                         dispatch(
@@ -22,19 +22,19 @@ export const projectsApi = apiSlice.injectEndpoints({
                                 'getProjects',
                                 undefined,
                                 (draft) => {
-                                    draft.push({...arg, id});
+                                    draft.push({ ...arg, id })
                                 }
                             )
-                        );
+                        )
                     }
                 } catch (err) {}
-            },
+            }
         }),
         editProject: builder.mutation({
             query: ({ id, data }) => ({
                 url: `/projects/${id}`,
                 method: 'PATCH',
-                body: data,
+                body: data
             }),
             async onQueryStarted({ id, data }, { queryFulfilled, dispatch }) {
                 const result = dispatch(
@@ -43,24 +43,24 @@ export const projectsApi = apiSlice.injectEndpoints({
                         undefined,
                         (draft) => {
                             const draggedProject = draft.find(
-                                (project) => Number(project.id) === Number(id)
-                            );
+                                (project) => project.id === id
+                            )
 
-                            draggedProject.status = data.status;
+                            draggedProject.status = data.status
                         }
                     )
-                );
+                )
                 try {
-                    await queryFulfilled;
+                    await queryFulfilled
                 } catch (err) {
-                    result.undo();
+                    result.undo()
                 }
-            },
+            }
         }),
         deleteProject: builder.mutation({
             query: (id) => ({
                 url: `/projects/${id}`,
-                method: 'DELETE',
+                method: 'DELETE'
             }),
             async onQueryStarted(arg, { queryFulfilled, dispatch }) {
                 const result = dispatch(
@@ -70,26 +70,26 @@ export const projectsApi = apiSlice.injectEndpoints({
                         (draft) => {
                             const updatedProjects = draft.filter(
                                 (project) => Number(project.id) !== Number(arg)
-                            );
+                            )
 
                             return [...updatedProjects]
                         }
                     )
-                );
+                )
 
                 try {
-                    await queryFulfilled;
+                    await queryFulfilled
                 } catch (err) {
-                    result.undo();
+                    result.undo()
                 }
-            },
-        }),
-    }),
-});
+            }
+        })
+    })
+})
 
 export const {
     useAddProjectMutation,
     useGetProjectsQuery,
     useEditProjectMutation,
-    useDeleteProjectMutation,
-} = projectsApi;
+    useDeleteProjectMutation
+} = projectsApi
