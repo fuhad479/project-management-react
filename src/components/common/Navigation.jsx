@@ -17,14 +17,14 @@ const Navigation = () => {
 
     return (
         <div className="flex items-center gap-[15px] bg-astronaut py-[16px] px-[32px]">
-            <FormField
+            {/* <FormField
                 type="text"
                 name="search"
                 id="search"
                 value=""
                 className="appearance-none block text-[14px] bg-transparent border border-1-[hsl(210deg,18%,87%)] rounded-[6px] px-[12px] focus:outline-none focus:border-[#0969da]"
                 onChangeHandler={() => console.log('changing this form field')}
-            />
+            /> */}
             <nav>
                 <ul className="flex gap-[16px]">
                     <li>

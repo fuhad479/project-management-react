@@ -32,7 +32,7 @@ export const apiSlice = createApi({
 export const apiSlice = createApi({
     reducerPath: 'api',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://localhost:5000'
+        baseUrl: 'https://project-management.cyclic.app'
     }),
     endpoints: () => ({})
 })
