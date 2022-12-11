@@ -2,11 +2,9 @@ import { useState } from 'react'
 import { PlusIcon } from '@radix-ui/react-icons'
 import Layout from '../components/base/Layout'
 import CreateTeam from '../components/modals/CreateTeam'
-import AddMember from '../components/modals/AddMember'
 import TeamList from '../components/Teams/TeamList'
 const Teams = () => {
     const [createTeamOpen, setCreateTeamOpen] = useState(false)
-    const [addMemberOpen, setAddMemberOpen] = useState(false)
 
     return (
         <Layout>
@@ -20,9 +18,8 @@ const Teams = () => {
                     <span className="block">New team</span>
                 </button>
             </div>
-            <TeamList setAddMemberOpen={setAddMemberOpen} />
+            <TeamList />
             {createTeamOpen && <CreateTeam setIsOpen={setCreateTeamOpen} />}
-            {addMemberOpen && <AddMember setAddMemberOpen={setAddMemberOpen} />}
         </Layout>
     )
 }

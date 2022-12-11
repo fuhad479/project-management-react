@@ -31,7 +31,7 @@ export default function ProjectGroup({ status, projects }) {
                 } border border-astronaut-300 rounded-[6px] pt-[8px] pb-[16px] px-[16px] overflow-hidden`}
             >
                 <div className="flex justify-between">
-                    <p className="status">{status}</p>
+                    <p className="capitalize font-medium">{status}</p>
                     <span>
                         {
                             projects.filter(

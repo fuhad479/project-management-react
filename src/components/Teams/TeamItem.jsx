@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { updateTeam } from '../../features/teams/teamsSlice'
 import {
     DotsVerticalIcon,
     TrashIcon,
@@ -11,8 +12,11 @@ import { useDeleteTeamMutation } from '../../features/teams/teamsApi'
 import { url } from 'gravatar'
 import moment from 'moment'
 
-const TeamItem = ({ team, setAddMemberOpen }) => {
+export default function TeamItem({ team, setAddMemberOpen }) {
     const [open, setOpen] = useState(false)
+
+    // dispatch function from react-redux
+    const dispatch = useDispatch()
 
     // using deleteTeam hook from RTK Query
     const [deleteTeam] = useDeleteTeamMutation()
@@ -40,7 +44,10 @@ const TeamItem = ({ team, setAddMemberOpen }) => {
                                 <TrashIcon />
                             </div>
                             <div
-                                onClick={() => setAddMemberOpen(true)}
+                                onClick={() => {
+                                    setAddMemberOpen(true)
+                                    dispatch(updateTeam(team))
+                                }}
                                 className="w-[25px] h-[25px] flex items-center justify-center border border-transparent rounded-full hover:border-astronaut-200"
                             >
                                 <PersonAdd />
@@ -81,5 +88,3 @@ const TeamItem = ({ team, setAddMemberOpen }) => {
         </>
     )
 }
-
-export default TeamItem
