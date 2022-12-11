@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Cross1Icon } from '@radix-ui/react-icons'
 import { useSelector } from 'react-redux'
 import { useAddTeamsMutation } from '../../features/teams/teamsApi'
-import toast from 'react-hot-toast'
 
 import FormField from '../Form/FormField'
 
@@ -14,7 +13,7 @@ const TeamCardModal = ({ setIsOpen }) => {
     const { user } = useSelector((state) => state.auth) || {}
     const { email } = user || {}
 
-    const [addTeams, { isSuccess }] = useAddTeamsMutation()
+    const [addTeams] = useAddTeamsMutation()
 
     function handleSubmit(e) {
         // preventing page refresh after submitting form data
@@ -28,13 +27,6 @@ const TeamCardModal = ({ setIsOpen }) => {
             members: [user]
         })
     }
-
-    useEffect(() => {
-        if (isSuccess) {
-            setIsOpen(false)
-            toast.success('Team added successfully!')
-        }
-    }, [isSuccess, setIsOpen])
 
     return (
         <div className="fixed top-0 left-0 w-full flex items-center justify-center bg-[rgba(43,82,118,0.9)] h-full bg-opacity-60 z-10">
