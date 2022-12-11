@@ -52,9 +52,9 @@ export default function TeamItem({ team, setAddMemberOpen }) {
                             >
                                 <PersonAdd />
                             </div>
-                            <div className="w-[25px] h-[25px] flex items-center justify-center border border-transparent rounded-full hover:border-astronaut-200">
+                            {/* <div className="w-[25px] h-[25px] flex items-center justify-center border border-transparent rounded-full hover:border-astronaut-200">
                                 <Pencil1Icon />
-                            </div>
+                            </div> */}
                         </div>
                     )}
                     <div

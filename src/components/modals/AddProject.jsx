@@ -9,13 +9,12 @@ import FormField from '../Form/FormField'
 export default function AddProject({ setAddProjectOpen }) {
     const [title, setTitle] = useState('')
     const [team, setTeam] = useState('')
-    const [teamSkip, setTeamSkip] = useState(true)
 
     // using useselector hook from react-redux
     const { user } = useSelector((state) => state.auth)
 
     // using getTeam hook from RTK Query
-    const { data: teams } = useGetTeamQuery(team, { skip: teamSkip })
+    const { data: teams } = useGetTeamQuery()
 
     // using addProject hook from RTK Query
     const [addProject, { isSuccess }] = useAddProjectMutation()
@@ -35,32 +34,17 @@ export default function AddProject({ setAddProjectOpen }) {
         })
     }
 
-    // debounce function
-    function debounce() {
-        let timeoutId
-        return (team) => {
-            clearTimeout(timeoutId)
-            setTimeout(() => {
-                if (team !== '') {
-                    setTeam(team)
-                    setTeamSkip(false)
-                }
-            }, 500)
-        }
-    }
-
-    // debounce handler function
-    const debounceHandler = debounce()
-
     useEffect(() => {
         isSuccess && setAddProjectOpen(false)
     }, [isSuccess])
+
+    console.log(team);
 
     return (
         <div className="fixed top-0 left-0 w-full flex items-center justify-center bg-[rgba(43,82,118,0.9)] h-full bg-opacity-60 z-10">
             <div className="bg-white border border-1-[hsl(210deg,18%,87%)] rounded-[6px] p-[16px]">
                 <div className="flex items-center justify-between">
-                    <p className="">Add member on this team!</p>
+                    <p className="">Add new project</p>
                     <Cross1Icon
                         onClick={() => setAddProjectOpen(false)}
                         className="cursor-pointer"
@@ -80,17 +64,20 @@ export default function AddProject({ setAddProjectOpen }) {
                             setTitle(event.target.value)
                         }
                     />
-                    <FormField
+                    <select
                         id="search-team"
                         name="search-team"
                         type="text"
                         placeholder="Search team"
-                        onChangeHandler={(event) =>
-                            debounceHandler(event.target.value)
-                        }
+                        onChange={(event) => setTeam(event.target.value)}
                         className="appearance-none block w-full text-[14px] border border-1-[hsl(210deg,18%,87%)] rounded-[6px] py-[5px] px-[12px] mb-[16px] focus:outline-none focus:border-[#0969da]"
-                    />
-                    {teams?.length > 0 && (
+                    >
+                        {teams?.length > 0 &&
+                            teams.map((team) => (
+                                <option value={team.title}>{team.title}</option>
+                            ))}
+                    </select>
+                    {/* {teams?.length > 0 && (
                         <div className="bg-white border border-[hsl(220,13%,91%)] rounded-[6px] mb-[16px]">
                             {teams.map((team) => (
                                 <div
@@ -106,7 +93,7 @@ export default function AddProject({ setAddProjectOpen }) {
                                 </div>
                             ))}
                         </div>
-                    )}
+                    )} */}
                     <input
                         type="submit"
                         name="submit"

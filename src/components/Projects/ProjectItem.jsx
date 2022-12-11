@@ -1,9 +1,14 @@
 import { useDrag } from 'react-dnd'
+import { useDeleteProjectMutation } from '../../features/projects/projectsApi'
 import { url } from 'gravatar'
+import { TrashIcon } from '@radix-ui/react-icons'
 import moment from 'moment'
 
 export default function ProjectItem({ project }) {
-    const { team, title, author, timestamp } = project
+    const { id, team, title, status, author, timestamp } = project
+
+    // using delete project hook from RKT Query
+    const [deleteProject] = useDeleteProjectMutation()
 
     // using useDrag hook from react-dnd to make this component a draggable target
     const [{ isDragging }, drag] = useDrag(() => ({
@@ -27,6 +32,13 @@ export default function ProjectItem({ project }) {
                 >
                     {team}
                 </span>
+                {status === 'backlog' && (
+                    <div onClick={() => deleteProject(id)} className="absolute right-0 flex items-center">
+                        <div className="w-[25px] h-[25px] flex items-center justify-center border border-transparent rounded-full hover:border-red-300">
+                            <TrashIcon color="red" />
+                        </div>
+                    </div>
+                )}
             </div>
             <p className="text-[14px]">{title}</p>
             <div className="flex items-center justify-between mt-3 relative">

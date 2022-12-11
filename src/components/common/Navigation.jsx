@@ -1,35 +1,14 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useMatch } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { userLoggedOut } from '../../features/auth/authSlice'
-import { getSearchKeyword } from '../../features/search/searchSlice'
 import { url } from 'gravatar'
 import FormField from '../Form/FormField'
 
 const Navigation = () => {
-    const projects = useMatch('/projects')
-    const teams = useMatch('/teams')
-
     const { user } = useSelector((state) => state.auth) || {}
-    const { name, email } = user || {}
+    const { username, email } = user || {}
     const dispatch = useDispatch()
-
-    const debounceHandler = (fn, delay) => {
-        let timeoutId
-        return (...arg) => {
-            clearTimeout(timeoutId)
-
-            timeoutId = setTimeout(() => {
-                fn(...arg)
-            }, delay)
-        }
-    }
-
-    const doSearch = (value) => {
-        dispatch(getSearchKeyword(value))
-    }
-
-    const handleSearch = debounceHandler(doSearch, 500)
 
     const handleLogout = () => {
         dispatch(userLoggedOut())
@@ -67,13 +46,14 @@ const Navigation = () => {
                 </ul>
             </nav>
             <div
-                className="ml-auto cursor-pointer"
+                className="ml-auto cursor-pointer flex items-center gap-[10px]"
                 onClick={handleLogout}
             >
+                <span className="block text-white">{username}</span>
                 <img
                     className="rounded-full"
                     src={url(email, { size: 20 })}
-                    alt={name}
+                    alt={username}
                 />
             </div>
         </div>

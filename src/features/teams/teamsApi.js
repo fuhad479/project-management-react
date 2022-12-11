@@ -9,7 +9,7 @@ export const teamsApi = apiSlice.injectEndpoints({
             query: (email) => `/teams?q=${email}`
         }),
         getTeam: builder.query({
-            query: (team) => `/teams/?title_like=${team}`
+            query: () => `/teams`
         }),
         getTeamInfo: builder.query({
             query: (id) => `/teams/${id}`
