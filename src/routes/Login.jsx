@@ -12,7 +12,7 @@ const Login = () => {
     const navigate = useNavigate()
 
     // using login hook from RTK Query
-    const [login, { isSuccess }] = useLoginMutation()
+    const [login, { isLoading, isSuccess }] = useLoginMutation()
 
     const handleSubmit = (e) => {
         // preventing page refresh after submitting the login form
@@ -32,34 +32,36 @@ const Login = () => {
 
     return (
         <div className="w-full h-screen flex flex-col items-center justify-center">
-            <p className="text-[24px] font-thin mb-[16px]">Sign in to project management</p>
+            <p className="text-[24px] font-thin mb-[16px]">
+                Sign in to project management
+            </p>
             <form
                 className="w-[310px] flex flex-col border border-[hsl(210deg,18%,87%)] rounded-[6px] bg-[hsl(210,29%,97%)] p-[16px]"
                 onSubmit={handleSubmit}
             >
-                    <FormField
-                        label="Email address"
-                        type="email"
-                        name="email-address"
-                        id="email-address"
-                        value={email}
-                        onChangeHandler={(e) => setEmail(e.target.value)}
-                        className="appearance-none block w-full text-[14px] border border-1-[hsl(210deg,18%,87%)] rounded-[6px] py-[5px] px-[12px] mt-[4px] mb-[16px] focus:outline-none focus:border-[#0969da]"
-                    />
-                    <FormField
-                        label="Password"
-                        type="password"
-                        name="password"
-                        id="password"
-                        value={password}
-                        onChangeHandler={(e) => setPassword(e.target.value)}
-                        className="appearance-none block w-full text-[14px] border border-1-[hsl(210deg,18%,87%)] rounded-[6px] py-[5px] px-[12px] mt-[4px] mb-[16px] focus:outline-none focus:border-[#0969da]"
-                    />
+                <FormField
+                    label="Email address"
+                    type="email"
+                    name="email-address"
+                    id="email-address"
+                    value={email}
+                    onChangeHandler={(e) => setEmail(e.target.value)}
+                    className="appearance-none block w-full text-[14px] border border-1-[hsl(210deg,18%,87%)] rounded-[6px] py-[5px] px-[12px] mt-[4px] mb-[16px] focus:outline-none focus:border-[#0969da]"
+                />
+                <FormField
+                    label="Password"
+                    type="password"
+                    name="password"
+                    id="password"
+                    value={password}
+                    onChangeHandler={(e) => setPassword(e.target.value)}
+                    className="appearance-none block w-full text-[14px] border border-1-[hsl(210deg,18%,87%)] rounded-[6px] py-[5px] px-[12px] mt-[4px] mb-[16px] focus:outline-none focus:border-[#0969da]"
+                />
                 <input
                     type="submit"
                     name="submit"
                     id="submit"
-                    value="Sign in"
+                    value={isLoading ? 'Signing in' : 'Sign in'}
                     className="appearance-none text-[14px] bg-[#2b5276] text-white border border-1 rounded-[6px] py-[5px] px-[16px] cursor-pointer hover:bg-[hsl(209,45%,29%)]"
                 />
             </form>

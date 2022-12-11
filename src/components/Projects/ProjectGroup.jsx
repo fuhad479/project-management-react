@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useEditProjectMutation } from '../../features/projects/projectsApi'
 import { useDrop } from 'react-dnd'
 import ProjectItem from './ProjectItem'
@@ -8,10 +8,10 @@ export default function ProjectGroup({ status, projects }) {
     const [addProjectOpen, setAddProjectOpen] = useState(false)
 
     // using editProject hook from RTK Query
-    const [editProject, { data }] = useEditProjectMutation()
+    const [editProject] = useEditProjectMutation()
 
     // using useDrop hook from react-dnd to make this component a droppable target
-    const [{ canDrop, isOver }, drop] = useDrop(() => ({
+    const [{ isOver }, drop] = useDrop(() => ({
         accept: 'project-card',
         drop: (item) => {
             editProject({ id: item.id, data: { status } })

@@ -8,6 +8,7 @@ import { useAddTeamMemberMutation } from '../../features/teams/teamsApi'
 import { url } from 'gravatar'
 import isValidEmail from '../../utils/isValidEmail'
 import FormField from '../Form/FormField'
+import Spinner from '../Spinner'
 
 export default function AddMember({ setOpen }) {
     const [email, setEmail] = useState('')
@@ -20,7 +21,7 @@ export default function AddMember({ setOpen }) {
     const { id, members } = useSelector((state) => state.teams)
 
     // using getUser hook from RTK Query
-    const { data } = useGetUserQuery(email, { skip })
+    const { data, isLoading, isSuccess } = useGetUserQuery(email, { skip })
 
     // using addTeamMember hook from RTK Query
     const [addTeamMember] = useAddTeamMemberMutation()
@@ -72,37 +73,51 @@ export default function AddMember({ setOpen }) {
                         className="appearance-none block w-full text-[14px] border border-1-[hsl(210deg,18%,87%)] rounded-[6px] py-[5px] px-[12px] mt-[4px] focus:outline-none focus:border-[#0969da]"
                     />
                 </form>
-                {data?.length > 0 && (
-                    <>
-                        <div
-                            onClick={(event) => {
-                                // indication if member is selected or not
-                                event.currentTarget.classList.toggle('active')
-                                dispatch(updateTeamMember(data[0]))
-                            }}
-                            className="w-[310px] flex items-center gap-[10px] border border-[hsl(210deg,18%,87%)] rounded-[6px] p-[8px] mt-[20px] cursor-pointer"
-                        >
-                            <img
-                                src={url(data[0].email, { size: 40 })}
-                                alt="avata"
-                                className="rounded-full"
-                            />
-                            <div className="leading-[20px]">
-                                <p className="text-[14px] font-medium">
-                                    {data[0].username}
-                                </p>
-                                <p className="text-[14px]">{data[0].email}</p>
+                {/* {isSuccess && (
+                    
+                )} */}
+                {isLoading ? (
+                    <div className="w-full flex justify-center mt-[16px]">
+                        <Spinner />
+                    </div>
+                ) : (
+                    !isLoading &&
+                    isSuccess && (
+                        <>
+                            <div
+                                onClick={(event) => {
+                                    // indication if member is selected or not
+                                    event.currentTarget.classList.toggle(
+                                        'active'
+                                    )
+                                    dispatch(updateTeamMember(data[0]))
+                                }}
+                                className="w-[310px] flex items-center gap-[10px] border border-[hsl(210deg,18%,87%)] rounded-[6px] p-[8px] mt-[20px] cursor-pointer"
+                            >
+                                <img
+                                    src={url(data[0].email, { size: 40 })}
+                                    alt="avata"
+                                    className="rounded-full"
+                                />
+                                <div className="leading-[20px]">
+                                    <p className="text-[14px] font-medium">
+                                        {data[0].username}
+                                    </p>
+                                    <p className="text-[14px]">
+                                        {data[0].email}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                        <input
-                            type="submit"
-                            name="submit"
-                            id="submit"
-                            value="Assign member"
-                            onClick={assignTeamMember}
-                            className="appearance-none w-full text-[14px] bg-[#2b5276] text-white border border-1 rounded-[6px] py-[5px] px-[16px] mt-[20px] cursor-pointer hover:bg-[hsl(209,45%,29%)]"
-                        />
-                    </>
+                            <input
+                                type="submit"
+                                name="submit"
+                                id="submit"
+                                value="Assign member"
+                                onClick={assignTeamMember}
+                                className="appearance-none w-full text-[14px] bg-[#2b5276] text-white border border-1 rounded-[6px] py-[5px] px-[16px] mt-[20px] cursor-pointer hover:bg-[hsl(209,45%,29%)]"
+                            />
+                        </>
+                    )
                 )}
             </div>
         </div>

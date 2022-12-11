@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import { useGetTeamsQuery } from '../../features/teams/teamsApi'
 import TeamItem from './TeamItem'
 import AddMember from '../modals/AddMember'
+import Spinner from '../Spinner'
 
 export default function TeamList() {
     const [open, setOpen] = useState(false)
@@ -11,7 +12,7 @@ export default function TeamList() {
     const { user } = useSelector((state) => state.auth) || {}
 
     // using getTeams hook from RTK Query to get teams data
-    const { data: teams } = useGetTeamsQuery(user?.email, {
+    const { data: teams, isLoading } = useGetTeamsQuery(user?.email, {
         refetchOnMountOrArgChange: true
     })
 
@@ -27,6 +28,11 @@ export default function TeamList() {
                         />
                     ))}
             </div>
+            {isLoading && (
+                <div className="w-full h-[calc(100%-117px)] flex items-center justify-center">
+                    <Spinner size={50} />
+                </div>
+            )}
             {open && <AddMember setOpen={setOpen} />}
         </>
     )
