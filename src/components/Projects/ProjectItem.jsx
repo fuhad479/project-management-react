@@ -32,8 +32,11 @@ export default function ProjectItem({ project }) {
                 >
                     {team}
                 </span>
-                {status === 'backlog' && (
-                    <div onClick={() => deleteProject(id)} className="absolute right-0 flex items-center">
+                {(status === 'backlog' || status === 'done') && (
+                    <div
+                        onClick={() => deleteProject(id)}
+                        className="absolute right-0 flex items-center"
+                    >
                         <div className="w-[25px] h-[25px] flex items-center justify-center border border-transparent rounded-full hover:border-red-300">
                             <TrashIcon color="red" />
                         </div>

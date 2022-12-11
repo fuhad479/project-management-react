@@ -72,16 +72,23 @@ export default function TeamItem({ team, setAddMemberOpen }) {
                         {moment(date).format('MMM DD')}
                     </p>
                     <div className="absolute w-auto h-full flex right-0 ml-auto -space-x-2">
-                        {members.map((member) => (
-                            <img
-                                key={member.email}
-                                src={url(member.email, {
-                                    size: 25
-                                })}
-                                alt="gravatar"
-                                className="rounded-full"
-                            />
-                        ))}
+                        {members
+                            .filter((member) => member.id <= 3)
+                            .map((member) => (
+                                <img
+                                    key={member.email}
+                                    src={url(member.email, {
+                                        size: 25
+                                    })}
+                                    alt="gravatar"
+                                    className="rounded-full"
+                                />
+                            ))}
+                        {members.length > 3 && (
+                            <div className="w-[21px] h-[21px] flex items-center justify-center rounded-full text-[11px] text-white tracking-[0px] bg-black z-10">
+                                +{members.length - 3}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

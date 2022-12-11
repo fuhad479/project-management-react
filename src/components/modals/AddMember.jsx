@@ -43,9 +43,6 @@ export default function AddMember({ setOpen }) {
 
     // function for assigning team member
     function assignTeamMember(event) {
-        // indication if member is selected or not
-        event.currentTarget.classList.toggle('active')
-
         // addTeamMember function from RTK Query for assigning a team member to existing team
         addTeamMember({ id, data: { members } })
     }
@@ -78,7 +75,11 @@ export default function AddMember({ setOpen }) {
                 {data?.length > 0 && (
                     <>
                         <div
-                            onClick={() => dispatch(updateTeamMember(data[0]))}
+                            onClick={(event) => {
+                                // indication if member is selected or not
+                                event.currentTarget.classList.toggle('active')
+                                dispatch(updateTeamMember(data[0]))
+                            }}
                             className="w-[310px] flex items-center gap-[10px] border border-[hsl(210deg,18%,87%)] rounded-[6px] p-[8px] mt-[20px] cursor-pointer"
                         >
                             <img
