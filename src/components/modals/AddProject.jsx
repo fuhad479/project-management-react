@@ -7,17 +7,17 @@ import { useGetTeamQuery } from '../../features/teams/teamsApi'
 import FormField from '../Form/FormField'
 
 export default function AddProject({ setAddProjectOpen }) {
+    // using getTeam hook from RTK Query
+    const { data: teams } = useGetTeamQuery()
+
     const [title, setTitle] = useState('')
     const [team, setTeam] = useState('')
 
     // using useselector hook from react-redux
     const { user } = useSelector((state) => state.auth)
 
-    // using getTeam hook from RTK Query
-    const { data: teams } = useGetTeamQuery()
-
     // using addProject hook from RTK Query
-    const [addProject, { isSuccess }] = useAddProjectMutation()
+    const [addProject, { isLoading, isSuccess }] = useAddProjectMutation()
 
     const timestamp = new Date().getTime()
 
@@ -38,7 +38,7 @@ export default function AddProject({ setAddProjectOpen }) {
         isSuccess && setAddProjectOpen(false)
     }, [isSuccess])
 
-    console.log(team);
+    console.log(team)
 
     return (
         <div className="fixed top-0 left-0 w-full flex items-center justify-center bg-[rgba(43,82,118,0.9)] h-full bg-opacity-60 z-10">
@@ -74,7 +74,12 @@ export default function AddProject({ setAddProjectOpen }) {
                     >
                         {teams?.length > 0 &&
                             teams.map((team) => (
-                                <option value={team.title}>{team.title}</option>
+                                <option
+                                    key={team.id}
+                                    value={team.title}
+                                >
+                                    {team.title}
+                                </option>
                             ))}
                     </select>
                     {/* {teams?.length > 0 && (
@@ -98,7 +103,7 @@ export default function AddProject({ setAddProjectOpen }) {
                         type="submit"
                         name="submit"
                         id="submit"
-                        value="Save project"
+                        value={isLoading ? 'Saving' : 'Save project'}
                         className="appearance-none text-[14px] bg-[#2b5276] text-white border border-1 rounded-[6px] py-[5px] px-[16px] cursor-pointer hover:bg-[hsl(209,45%,29%)]"
                     />
                 </form>

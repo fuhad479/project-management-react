@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLoginMutation } from '../features/auth/authApi'
-
 import FormField from '../components/Form/FormField'
 
-const Login = () => {
+export default function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
@@ -68,5 +67,3 @@ const Login = () => {
         </div>
     )
 }
-
-export default Login

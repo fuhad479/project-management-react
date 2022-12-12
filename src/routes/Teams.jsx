@@ -1,27 +1,25 @@
 import { useState } from 'react'
 import { PlusIcon } from '@radix-ui/react-icons'
 import Layout from '../components/base/Layout'
-import CreateTeam from '../components/modals/CreateTeam'
 import TeamList from '../components/Teams/TeamList'
-const Teams = () => {
-    const [createTeamOpen, setCreateTeamOpen] = useState(false)
+import CreateTeam from '../components/modals/CreateTeam'
+
+export default function Teams() {
+    const [open, setOpen] = useState(false)
 
     return (
         <Layout>
-            <div className="py-[16px] px-[32px] flex justify-between">
-                <h1 className="">Teams</h1>
-                <button
-                    onClick={() => setCreateTeamOpen(true)}
-                    className="flex items-center gap-[5px] bg-[hsl(209,47%,32%)] text-white border border-1 rounded-[6px] py-[3px] px-[12px] text-[14px] hover:bg-[hsl(209,45%,29%)]"
-                >
-                    <PlusIcon />
-                    <span className="block">New team</span>
-                </button>
-            </div>
             <TeamList />
-            {createTeamOpen && <CreateTeam setIsOpen={setCreateTeamOpen} />}
+            <button
+                onClick={() => setOpen(true)}
+                className="absolute bottom-6 right-6  w-[50px] h-[50px] flex items-center justify-center gap-[5px] bg-[hsl(209,47%,32%)] text-white border border-1 rounded-full py-[3px] px-[12px] text-[14px] hover:bg-[hsl(209,45%,29%)]"
+            >
+                <PlusIcon
+                    width={30}
+                    height={30}
+                />
+            </button>
+            {open && <CreateTeam setOpen={setOpen} />}
         </Layout>
     )
 }
-
-export default Teams

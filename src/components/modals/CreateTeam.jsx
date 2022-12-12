@@ -1,11 +1,12 @@
-import { useState } from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect } from 'react'
 import { Cross1Icon } from '@radix-ui/react-icons'
 import { useSelector } from 'react-redux'
 import { useAddTeamsMutation } from '../../features/teams/teamsApi'
 
 import FormField from '../Form/FormField'
 
-const TeamCardModal = ({ setIsOpen }) => {
+export default function CreateTeam({ setOpen }) {
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
 
@@ -13,7 +14,7 @@ const TeamCardModal = ({ setIsOpen }) => {
     const { user } = useSelector((state) => state.auth) || {}
     const { email } = user || {}
 
-    const [addTeams] = useAddTeamsMutation()
+    const [addTeams, { isLoading, isSuccess }] = useAddTeamsMutation()
 
     function handleSubmit(e) {
         // preventing page refresh after submitting form data
@@ -28,13 +29,17 @@ const TeamCardModal = ({ setIsOpen }) => {
         })
     }
 
+    useEffect(() => {
+        isSuccess && setOpen(false)
+    }, [isSuccess])
+
     return (
         <div className="fixed top-0 left-0 w-full flex items-center justify-center bg-[rgba(43,82,118,0.9)] h-full bg-opacity-60 z-10">
             <div className="bg-[#f6f8fa] border border-1-[hsl(210deg,18%,87%)] rounded-[6px] p-[16px]">
                 <div className="flex items-center justify-between">
                     <p className="">Add new team!</p>
                     <button
-                        onClick={() => setIsOpen(false)}
+                        onClick={() => setOpen(false)}
                         className=""
                     >
                         <Cross1Icon />
@@ -68,7 +73,7 @@ const TeamCardModal = ({ setIsOpen }) => {
                         type="submit"
                         name="submit"
                         id="submit"
-                        value="Add team"
+                        value={isLoading ? 'Adding team' : 'Add team'}
                         className="appearance-none w-full !m-0 text-[14px] bg-[#2b5276] text-white border border-1 rounded-[6px] py-[5px] px-[16px] cursor-pointer hover:bg-[hsl(209,45%,29%)]"
                     />
                 </form>
@@ -76,5 +81,3 @@ const TeamCardModal = ({ setIsOpen }) => {
         </div>
     )
 }
-
-export default TeamCardModal

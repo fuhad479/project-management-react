@@ -1,4 +1,4 @@
-export default function Spinner({ size }) {
+export default function Spinner() {
     return (
         <div role="status">
             <svg

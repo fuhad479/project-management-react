@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { updateTeamMember } from '../../features/teams/teamsSlice'
 import { Cross1Icon } from '@radix-ui/react-icons'
@@ -24,7 +24,10 @@ export default function AddMember({ setOpen }) {
     const { data, isLoading, isSuccess } = useGetUserQuery(email, { skip })
 
     // using addTeamMember hook from RTK Query
-    const [addTeamMember] = useAddTeamMemberMutation()
+    const [
+        addTeamMember,
+        { isLoading: addTeamMemberLoading, isSuccess: addTeamMemberSuccess }
+    ] = useAddTeamMemberMutation()
 
     // this is debounce function
     function debounce() {
@@ -47,6 +50,10 @@ export default function AddMember({ setOpen }) {
         // addTeamMember function from RTK Query for assigning a team member to existing team
         addTeamMember({ id, data: { members } })
     }
+
+    useEffect(() => {
+        addTeamMemberSuccess && setOpen(false)
+    }, [addTeamMemberSuccess])
 
     return (
         <div className="fixed top-0 left-0 w-full flex items-center justify-center bg-[rgba(43,82,118,0.9)] h-full bg-opacity-60 z-10">
@@ -73,9 +80,6 @@ export default function AddMember({ setOpen }) {
                         className="appearance-none block w-full text-[14px] border border-1-[hsl(210deg,18%,87%)] rounded-[6px] py-[5px] px-[12px] mt-[4px] focus:outline-none focus:border-[#0969da]"
                     />
                 </form>
-                {/* {isSuccess && (
-                    
-                )} */}
                 {isLoading ? (
                     <div className="w-full flex justify-center mt-[16px]">
                         <Spinner />
@@ -112,7 +116,11 @@ export default function AddMember({ setOpen }) {
                                 type="submit"
                                 name="submit"
                                 id="submit"
-                                value="Assign member"
+                                value={
+                                    addTeamMemberLoading
+                                        ? 'Assigning member'
+                                        : 'Assign member'
+                                }
                                 onClick={assignTeamMember}
                                 className="appearance-none w-full text-[14px] bg-[#2b5276] text-white border border-1 rounded-[6px] py-[5px] px-[16px] mt-[20px] cursor-pointer hover:bg-[hsl(209,45%,29%)]"
                             />

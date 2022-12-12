@@ -32,7 +32,7 @@ export const apiSlice = createApi({
 export const apiSlice = createApi({
     reducerPath: 'api',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'https://project-management.cyclic.app'
+        baseUrl: 'https://project-management-json-production.up.railway.app'
     }),
     endpoints: () => ({})
 })
