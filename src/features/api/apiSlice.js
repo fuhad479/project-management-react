@@ -37,5 +37,6 @@ export const apiSlice = createApi({
                 ? process.env.REACT_APP_DEV_SERVER
                 : process.env.REACT_APP_PROD_SERVER
     }),
+    tagTypes: ["Team"],
     endpoints: () => ({})
 })

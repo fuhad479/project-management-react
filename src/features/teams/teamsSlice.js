@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const teamsSlice = createSlice({
     name: 'teams',
     initialState: {
+        editing: false,
         title: '',
         description: '',
         email: '',

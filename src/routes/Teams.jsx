@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
 import { PlusIcon } from '@radix-ui/react-icons'
 import Layout from '../components/base/Layout'
 import TeamList from '../components/Teams/TeamList'
@@ -6,6 +7,8 @@ import CreateTeam from '../components/modals/CreateTeam'
 
 export default function Teams() {
     const [open, setOpen] = useState(false)
+
+    const { editing } = useSelector((state) => state.teams)
 
     return (
         <Layout>
@@ -20,6 +23,7 @@ export default function Teams() {
                 />
             </button>
             {open && <CreateTeam setOpen={setOpen} />}
+            {editing && <CreateTeam setOpen={setOpen} />}
         </Layout>
     )
 }

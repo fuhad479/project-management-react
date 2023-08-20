@@ -6,13 +6,22 @@ export const teamsApi = apiSlice.injectEndpoints({
             query: ({ team }) => `/teams?team=${team}`
         }),
         getTeams: builder.query({
-            query: (email) => `/teams?q=${email}`
+            query: (email) => `/teams?q=${email}`,
+            providesTags: ["Team"],
         }),
         getTeam: builder.query({
             query: () => `/teams`
         }),
         getTeamInfo: builder.query({
             query: (id) => `/teams/${id}`
+        }),
+        updateTeam: builder.mutation({
+            query: (data) => ({
+                url: `/teams/${data.id}`,
+                method: 'PATCH',
+                body: data
+            }),
+            invalidatesTags: ["Team"],
         }),
         addTeams: builder.mutation({
             query: (data) => ({
@@ -115,5 +124,6 @@ export const {
     useGetTeamInfoQuery,
     useAddTeamsMutation,
     useAddTeamMemberMutation,
+    useUpdateTeamMutation,
     useDeleteTeamMutation
 } = teamsApi

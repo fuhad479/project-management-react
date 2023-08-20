@@ -1,42 +1,54 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react'
 import { Cross1Icon } from '@radix-ui/react-icons'
-import { useSelector } from 'react-redux'
+import { updateTeam as ut } from '../../features/teams/teamsSlice'
+import { useDispatch, useSelector } from 'react-redux'
 import { useAddTeamsMutation } from '../../features/teams/teamsApi'
+import { useUpdateTeamMutation } from '../../features/teams/teamsApi'
 
 import FormField from '../Form/FormField'
 
 export default function CreateTeam({ setOpen }) {
-    const [title, setTitle] = useState('')
-    const [description, setDescription] = useState('')
+    const team = useSelector((state) => state.teams)
+
+    const [title, setTitle] = useState(team.title)
+    const [description, setDescription] = useState(team.description)
     const [validationMessage, setValidationMessage] = useState('')
+
+    const dispatch = useDispatch()
 
     // using useSelector hook from RTK Query to get authenticated user data
     const { user } = useSelector((state) => state.auth) || {}
     const { email } = user || {}
 
     const [addTeams, { isLoading, isSuccess }] = useAddTeamsMutation()
+    const [updateTeam, { isSuccess: isSuccessUT }] = useUpdateTeamMutation()
 
     function handleSubmit(e) {
         // preventing page refresh after submitting form data
         e.preventDefault()
-        // using addTeam function to create a team
-        if (title !== '') {
-            addTeams({
-                title,
-                description,
-                email,
-                date: new Date().getTime(),
-                members: [user]
-            })
+        if (!team.editing) {
+            // using addTeam function to create a team
+            if (title !== '') {
+                addTeams({
+                    title,
+                    description,
+                    email,
+                    date: new Date().getTime(),
+                    members: [user]
+                })
+            }
+            // set a validation message so user doesn't keep title empty
+            setValidationMessage('Please provide a team title')
+        } else {
+            updateTeam({ ...team, title, description })
         }
-        // set a validation message so user doesn't keep title empty
-        setValidationMessage('Please provide a team title')
     }
 
     useEffect(() => {
         isSuccess && setOpen(false)
-    }, [isSuccess])
+        isSuccessUT && dispatch(ut({ ...team, editing: false }))
+    }, [isSuccess, isSuccessUT])
 
     return (
         <div className="fixed top-0 left-0 w-full flex items-center justify-center bg-[rgba(43,82,118,0.9)] h-full bg-opacity-60 z-10">
@@ -44,8 +56,11 @@ export default function CreateTeam({ setOpen }) {
                 <div className="flex items-center justify-between">
                     <p className="">Add new team!</p>
                     <button
-                        onClick={() => setOpen(false)}
-                        className=""
+                        onClick={() => {
+                            team.editing
+                                ? dispatch(ut({ ...team, editing: false }))
+                                : setOpen(false)
+                        }}
                     >
                         <Cross1Icon />
                     </button>
@@ -74,13 +89,23 @@ export default function CreateTeam({ setOpen }) {
                             onChange={(e) => setDescription(e.target.value)}
                         ></textarea>
                     </div>
-                    <input
-                        type="submit"
-                        name="submit"
-                        id="submit"
-                        value={isLoading ? 'Please wait' : 'Create team'}
-                        className="appearance-none w-full !m-0 text-[14px] bg-[#2b5276] text-white border border-1 rounded-[6px] py-[5px] px-[16px] cursor-pointer hover:bg-[hsl(209,45%,29%)]"
-                    />
+                    {!team.editing ? (
+                        <input
+                            type="submit"
+                            name="submit"
+                            id="submit"
+                            value={isLoading ? 'Please wait' : 'Create team'}
+                            className="appearance-none w-full !m-0 text-[14px] bg-[#2b5276] text-white border border-1 rounded-[6px] py-[5px] px-[16px] cursor-pointer hover:bg-[hsl(209,45%,29%)]"
+                        />
+                    ) : (
+                        <input
+                            type="submit"
+                            name="submit"
+                            id="submit"
+                            value={'Update'}
+                            className="appearance-none w-full !m-0 text-[14px] bg-[#2b5276] text-white border border-1 rounded-[6px] py-[5px] px-[16px] cursor-pointer hover:bg-[hsl(209,45%,29%)]"
+                        />
+                    )}
                     {validationMessage !== '' && (
                         <div className="w-full text-[14px] text-red-700 bg-red-100 border border-1 border-red-400 rounded-[6px] py-[5px] px-[12px] mt-[4px] mb-[16px]">
                             {validationMessage}

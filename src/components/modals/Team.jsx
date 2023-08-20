@@ -1,14 +1,11 @@
-import { Cross1Icon } from '@radix-ui/react-icons'
 import { useGetTeamInfoQuery } from '../../features/teams/teamsApi'
 import { url } from 'gravatar'
 
 import Spinner from '../Spinner'
 
 export default function Team({ teamOpen, setTeamOpen }) {
-    const { data, isSuccess, isLoading, isError } =
+    const { data, isSuccess, isLoading } =
         useGetTeamInfoQuery(teamOpen)
-
-    console.log(data)
 
     return (
         <div className="fixed top-0 left-0 w-full flex items-center justify-center bg-[rgba(43,82,118,0.9)] h-full bg-opacity-60 z-10">

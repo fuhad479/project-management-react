@@ -53,15 +53,25 @@ export default function TeamItem({ team, setAddMemberOpen, setTeamOpen }) {
                                 onClick={(event) => {
                                     event.stopPropagation()
                                     setAddMemberOpen(true)
-                                    dispatch(updateTeam(team))
+                                    dispatch(
+                                        updateTeam({ ...team, editing: false })
+                                    )
                                 }}
                                 className="w-[25px] h-[25px] flex items-center justify-center border border-transparent rounded-full hover:border-astronaut-200"
                             >
                                 <PersonAdd />
                             </div>
-                            {/* <div className="w-[25px] h-[25px] flex items-center justify-center border border-transparent rounded-full hover:border-astronaut-200">
+                            <div
+                                onClick={(event) => {
+                                    event.stopPropagation()
+                                    dispatch(
+                                        updateTeam({ ...team, editing: true })
+                                    )
+                                }}
+                                className="w-[25px] h-[25px] flex items-center justify-center border border-transparent rounded-full hover:border-astronaut-200"
+                            >
                                 <Pencil1Icon />
-                            </div> */}
+                            </div>
                         </div>
                     )}
                     <div
