@@ -9,6 +9,7 @@ import FormField from '../Form/FormField'
 export default function CreateTeam({ setOpen }) {
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
+    const [validationMessage, setValidationMessage] = useState('')
 
     // using useSelector hook from RTK Query to get authenticated user data
     const { user } = useSelector((state) => state.auth) || {}
@@ -20,13 +21,17 @@ export default function CreateTeam({ setOpen }) {
         // preventing page refresh after submitting form data
         e.preventDefault()
         // using addTeam function to create a team
-        addTeams({
-            title,
-            description,
-            email,
-            date: new Date().getTime(),
-            members: [user]
-        })
+        if (title !== '') {
+            addTeams({
+                title,
+                description,
+                email,
+                date: new Date().getTime(),
+                members: [user]
+            })
+        }
+        // set a validation message so user doesn't keep title empty
+        setValidationMessage('Please provide a team title')
     }
 
     useEffect(() => {
@@ -53,7 +58,7 @@ export default function CreateTeam({ setOpen }) {
                         type="text"
                         name="team"
                         id="team-name"
-                        placeholder="Team title"
+                        placeholder="Development"
                         value={title}
                         onChangeHandler={(e) => setTitle(e.target.value)}
                         className="appearance-none block w-full text-[14px] border border-1-[hsl(210deg,18%,87%)] rounded-[6px] py-[5px] px-[12px] mt-[4px] mb-[16px] focus:outline-none focus:border-[#0969da]"
@@ -63,7 +68,7 @@ export default function CreateTeam({ setOpen }) {
                             type="text"
                             name="title"
                             id="team-title"
-                            placeholder="Team description"
+                            placeholder="Concisely describe your team's purpose, goals, and focus."
                             className="appearance-none block w-full h-[100px] text-[14px] border border-1-[hsl(210deg,18%,87%)] rounded-[6px] py-[5px] px-[12px] mt-[4px] mb-[16px] focus:outline-none focus:border-[#0969da] resize-none"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
@@ -73,9 +78,14 @@ export default function CreateTeam({ setOpen }) {
                         type="submit"
                         name="submit"
                         id="submit"
-                        value={isLoading ? 'Adding team' : 'Add team'}
+                        value={isLoading ? 'Please wait' : 'Create team'}
                         className="appearance-none w-full !m-0 text-[14px] bg-[#2b5276] text-white border border-1 rounded-[6px] py-[5px] px-[16px] cursor-pointer hover:bg-[hsl(209,45%,29%)]"
                     />
+                    {validationMessage !== '' && (
+                        <div className="w-full text-[14px] text-red-700 bg-red-100 border border-1 border-red-400 rounded-[6px] py-[5px] px-[12px] mt-[4px] mb-[16px]">
+                            {validationMessage}
+                        </div>
+                    )}
                 </form>
             </div>
         </div>

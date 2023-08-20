@@ -5,9 +5,11 @@ import { InfoCircledIcon } from '@radix-ui/react-icons'
 import TeamItem from './TeamItem'
 import AddMember from '../modals/AddMember'
 import Spinner from '../Spinner'
+import Team from '../modals/Team'
 
 export default function TeamList() {
     const [open, setOpen] = useState(false)
+    const [teamOpen, setTeamOpen] = useState('')
 
     // using useSelector hook to get authenticated user data
     const { user } = useSelector((state) => state.auth) || {}
@@ -25,11 +27,11 @@ export default function TeamList() {
                 </div>
             )}
             {teams?.length <= 0 && (
-                <div className="w-full h-[calc(100%-106px)] flex flex-col items-center justify-center gap-[16px]">
+                <div className="w-full h-[calc(100%-56px)] flex flex-col items-center justify-center gap-[8px]">
                     <InfoCircledIcon
                         width={50}
                         height={50}
-                        color='#2B5276'
+                        color="#2B5276"
                     />
                     <span>Sorry there is no team please create one</span>
                 </div>
@@ -42,10 +44,12 @@ export default function TeamList() {
                                 key={team.id}
                                 team={team}
                                 setAddMemberOpen={setOpen}
+                                setTeamOpen={setTeamOpen}
                             />
                         ))}
                 </div>
             )}
+            {teamOpen && <Team teamOpen={teamOpen} setTeamOpen={setTeamOpen} />}
             {open && <AddMember setOpen={setOpen} />}
         </>
     )

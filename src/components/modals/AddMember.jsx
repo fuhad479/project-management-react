@@ -85,9 +85,10 @@ export default function AddMember({ setOpen }) {
                         <Spinner />
                     </div>
                 ) : (
-                    !isLoading &&
-                    isSuccess && (
+                    isSuccess &&
+                    data.length > 0 && (
                         <>
+                            <p className="text-[14px] mt-[20px]">Click to select members</p>
                             <div
                                 onClick={(event) => {
                                     // indication if member is selected or not
@@ -96,7 +97,7 @@ export default function AddMember({ setOpen }) {
                                     )
                                     dispatch(updateTeamMember(data[0]))
                                 }}
-                                className="w-[310px] flex items-center gap-[10px] border border-[hsl(210deg,18%,87%)] rounded-[6px] p-[8px] mt-[20px] cursor-pointer"
+                                className="w-[310px] flex items-center gap-[10px] border border-[hsl(210deg,18%,87%)] rounded-[6px] p-[8px] mt-2 cursor-pointer"
                             >
                                 <img
                                     src={url(data[0].email, { size: 40 })}
@@ -105,10 +106,10 @@ export default function AddMember({ setOpen }) {
                                 />
                                 <div className="leading-[20px]">
                                     <p className="text-[14px] font-medium">
-                                        {data[0].username}
+                                        {data[0]?.username}
                                     </p>
                                     <p className="text-[14px]">
-                                        {data[0].email}
+                                        {data[0]?.email}
                                     </p>
                                 </div>
                             </div>
@@ -118,7 +119,7 @@ export default function AddMember({ setOpen }) {
                                 id="submit"
                                 value={
                                     addTeamMemberLoading
-                                        ? 'Assigning member'
+                                        ? 'Please wait'
                                         : 'Assign member'
                                 }
                                 onClick={assignTeamMember}
@@ -127,6 +128,7 @@ export default function AddMember({ setOpen }) {
                         </>
                     )
                 )}
+                {data && data.length === 0 && <div className='w-full text-[14px] text-red-700 bg-red-100 border border-1 border-red-400 rounded-[6px] py-[5px] px-[12px] mt-3 mb-[16px]'>No user found with this email address</div>}
             </div>
         </div>
     )

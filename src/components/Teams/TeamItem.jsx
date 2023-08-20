@@ -12,7 +12,7 @@ import { useDeleteTeamMutation } from '../../features/teams/teamsApi'
 import { url } from 'gravatar'
 import moment from 'moment'
 
-export default function TeamItem({ team, setAddMemberOpen }) {
+export default function TeamItem({ team, setAddMemberOpen, setTeamOpen }) {
     const [open, setOpen] = useState(false)
 
     // dispatch function from react-redux
@@ -28,7 +28,10 @@ export default function TeamItem({ team, setAddMemberOpen }) {
 
     return (
         <>
-            <div className="border border-astronaut-200 shadow-[0_0_20px_5px] shadow-astronaut-100 rounded-[6px] p-[16px] cursor-pointer">
+            <div
+                onClick={() => setTeamOpen(team.id)}
+                className="border border-astronaut-200 shadow-[0_0_20px_5px] shadow-astronaut-100 rounded-[6px] p-[16px] cursor-pointer"
+            >
                 <div className="flex items-center justify-between mb-[8px] relative">
                     <span
                         className={`inline-block border border-astronaut-200 rounded-full py-[3px] px-[12px] text-[12px] font-medium uppercase `}
@@ -38,13 +41,17 @@ export default function TeamItem({ team, setAddMemberOpen }) {
                     {open && (
                         <div className="absolute right-[25px] flex items-center">
                             <div
-                                onClick={() => deleteTeam({ id, email })}
+                                onClick={(event) => {
+                                    event.stopPropagation()
+                                    deleteTeam({ id, email })
+                                }}
                                 className="w-[25px] h-[25px] flex items-center justify-center border border-transparent rounded-full hover:border-astronaut-200"
                             >
                                 <TrashIcon />
                             </div>
                             <div
-                                onClick={() => {
+                                onClick={(event) => {
+                                    event.stopPropagation()
                                     setAddMemberOpen(true)
                                     dispatch(updateTeam(team))
                                 }}
@@ -58,7 +65,10 @@ export default function TeamItem({ team, setAddMemberOpen }) {
                         </div>
                     )}
                     <div
-                        onClick={() => setOpen(!open)}
+                        onClick={(event) => {
+                            event.stopPropagation()
+                            setOpen(!open)
+                        }}
                         className={`w-[25px] h-[25px] flex items-center justify-center border border-transparent rounded-full hover:border-astronaut-200 ${
                             open && 'border-astronaut-200'
                         }`}
