@@ -11,7 +11,7 @@ export default function Login() {
     const navigate = useNavigate()
 
     // using login hook from RTK Query
-    const [login, { isLoading, isSuccess }] = useLoginMutation()
+    const [login, { isLoading, isSuccess, isError, error }] = useLoginMutation()
 
     const handleSubmit = (e) => {
         // preventing page refresh after submitting the login form
@@ -71,9 +71,10 @@ export default function Login() {
                             type="submit"
                             name="submit"
                             id="submit"
-                            value={isLoading ? 'Signing in' : 'Sign in'}
+                            value={isLoading ? 'Please wait' : 'Sign in'}
                             className="appearance-none text-[14px] bg-[#2b5276] text-white border border-1 rounded-[6px] py-[5px] px-[16px] cursor-pointer hover:bg-[hsl(209,45%,29%)]"
                         />
+                        {isError && <div className="text-[14px] text-red-400 mt-[10px]">{`${error.data} please try again`}</div>}
                     </form>
                 </div>
             </div>

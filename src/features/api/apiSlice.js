@@ -32,7 +32,10 @@ export const apiSlice = createApi({
 export const apiSlice = createApi({
     reducerPath: 'api',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'https://pm-y9p0.onrender.com'
+        baseUrl:
+            process.env.NODE_ENV === 'development'
+                ? process.env.REACT_APP_DEV_SERVER
+                : process.env.REACT_APP_PROD_SERVER
     }),
     endpoints: () => ({})
 })
